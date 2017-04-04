@@ -6,7 +6,7 @@
 // Login   <sanche_p@etna-alternance.net>
 // 
 // Started on  Sat Apr  1 17:51:59 2017 SANCHEZ Pierre
-// Last update Sat Apr  1 18:19:23 2017 SANCHEZ Pierre
+// Last update Sat Apr  1 18:31:27 2017 SANCHEZ Pierre
 //
 
 $tree = array (
@@ -46,10 +46,14 @@ function run($tree) {
     {
       $condition = run($tree['condition']);
       if($condition != 0)
-	echo "bendo";
+	{
+	  // ...
+	}
     }
-  /*  if ($tree['type'] == 'INTEGER')*/
-      else
+  
+  if ($tree['type'] == 'INTEGER')
+    return $tree['value'];
+  else
     echo "Unable to handle node type ".$tree['type'];
 }
 run($tree);
