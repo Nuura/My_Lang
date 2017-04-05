@@ -6,8 +6,10 @@
 // Login   <tarlow_v@etna-alternance.net>
 // 
 // Started on  Wed Mar 29 08:41:34 2017 TARLOWSKI Valentin
-// Last update Sat Apr  1 01:33:34 2017 SANCHEZ Pierre
+// Last update Sun Apr  2 11:29:51 2017 SANCHEZ Pierre
 //
+
+REQUIRE_ONCE("parser.php");
 
 class Lexer
 {
@@ -18,12 +20,12 @@ class Lexer
 		    ['else', 'ELSE'],
 		    ['\(', 'LEFT_PAREN'],
 		    ['\)', 'RIGHT_PAREN'],
-		    ['\d', 'INTEGER'],
+		    ['\d+', 'INTEGER'],
 		    ['\{', 'LEFT_BRACE'],
 		    ['\}', 'RIGHT_BRACE'],
 		    [';', 'SEMICOLON'],
 		    ['print', 'PRINT'],
-		    ['\"[\w]+\"', 'STRING'],
+		    ['\".+\"', 'STRING'],
 		    ['var', 'VARIABLE'],
 		    ['[\w]+', 'VARNAME'],
 		    ['(=)[^=<>]', 'AF'],
@@ -46,24 +48,27 @@ class Lexer
 
   public function tokenization()
   {
-    $this->cleanCode();
-    do
+    $error = false;
+    while($this->code > 0 && !$error)
       {
+	$this->code = ltrim($this->code);	
+	var_dump($this->code);
 	$error = true;
 	foreach ($this->rules as $rule)
-	    if (preg_match("/^" . $rule[0] . "/", $this->code, $preg))
-	      {
-		$error = false;
-		if (isset($preg[1]))
-		  $preg[0] = $preg[1];
-		$this->tokens[] = [
-			    'type' => $rule[1],
-			    'value' => $preg[0]
-			    ];
-		$this->code = substr($this->code, strlen($preg[0]));
-		break;
-	      }
-      } while($this->code && !$error);
+	  if (preg_match("/^" . $rule[0] . "/", $this->code, $preg))
+	    {
+	      $error = false;
+	      if (isset($preg[1]))
+		$preg[0] = $preg[1];
+	      $this->tokens[] = [
+				 'type' => $rule[1],
+				 'value' => $preg[0]
+				 ];
+	      $this->code = substr($this->code, strlen($preg[0]));
+	      break;
+	    }
+	$this->code = ltrim($this->code);
+      } 
     if ($error)
       {
 	echo "No match found for " . $this->code . "\n";
@@ -72,16 +77,27 @@ class Lexer
     return $this->tokens;
   }
 
-  private function cleanCode()
+  private function clean_code()
   {
-    $this->code = str_replace("\n", "", $this->code);
-    $this->code = str_replace(" ", "", $this->code);
+    $this->code = ltrim($this->code);
   }
 }
 
-$code = "if (1) { }";
+$code = "var test = 15;
+if (test > 10)
+{
+     print \"Hello World\";
+}
+else
+{
+     print \"Oui\";
+}
+";
 
 $lexer = NEW Lexer($code);
 $tokens = $lexer->tokenization();
-
 var_dump($tokens);
+$parser = NEW Parser($tokens);
+$tree = $parser->parser();
+
+var_dump($tree);
