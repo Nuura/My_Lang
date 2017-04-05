@@ -5,7 +5,7 @@
 // Login   <tarlow_v@etna-alternance.net>
 // 
 // Started on  Fri Mar 31 07:44:51 2017 TARLOWSKI Valentin
-// Last update Wed Apr  5 22:29:10 2017 TARLOWSKI Valentin
+// Last update Wed Apr  5 23:59:35 2017 TARLOWSKI Valentin
 //
 
 class Parser
@@ -55,13 +55,11 @@ class Parser
     if ($this->get_token()['type'] == 'INTEGER' || $this->get_token()['type'] == 'STRING')
       $value = $this->expect($this->get_token()['type']);
     $this->expect('SEMICOLON');
-    foreach ($this->variables as $variable)
-      if ($variable['name'] == $name)
-	$error = true;
-    if (!$error)
-      $this->variables[] = array('type' => 'variable', 'name' => $name['value'], 'value' =>  $value);
-    else
-      exit('Multiple variable declaration : ' . $name);
+    if (!empty($this->variables))
+      foreach ($this->variables as $variable)
+	if ($variable['name'] == $name['value'])
+	  exit('Multiple variable declaration : ' . $name['value']);
+    $this->variables[] = array('type' => 'variable', 'name' => $name['value'], 'value' =>  $value);
   }
   
   private function check_if()
@@ -109,6 +107,11 @@ class Parser
     else if ($this->get_token()['type'] == "IF")
       {
 	return $this->check_if();
+      }
+    else if ($this->get_token()['type'] == "VARIABLE")
+      {
+	$this->check_var();
+	return 'variable';
       }
   }
   
