@@ -6,7 +6,7 @@
 // Login   <tarlow_v@etna-alternance.net>
 // 
 // Started on  Wed Mar 29 08:41:34 2017 TARLOWSKI Valentin
-// Last update Wed Apr  5 22:07:41 2017 TARLOWSKI Valentin
+// Last update Thu Apr  6 00:04:59 2017 TARLOWSKI Valentin
 //
 
 REQUIRE_ONCE("parser.php");
@@ -92,7 +92,9 @@ else
      {
         print \"Oui\";
      }
-}";
+}
+var test3 = \"oui\";
+";
 
 $lexer = NEW Lexer($code);
 $tokens = $lexer->tokenization();
