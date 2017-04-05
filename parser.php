@@ -5,13 +5,14 @@
 // Login   <tarlow_v@etna-alternance.net>
 // 
 // Started on  Fri Mar 31 07:44:51 2017 TARLOWSKI Valentin
-// Last update Wed Apr  5 21:47:38 2017 TARLOWSKI Valentin
+// Last update Wed Apr  5 22:17:05 2017 TARLOWSKI Valentin
 //
 
 class Parser
 {
   private $tokens;
   private $tree;
+  private $variables;
   private $funcs = array (
 			 'VARIABLE' => 'check_var',
 			 'IF' => 'check_if'
@@ -31,7 +32,10 @@ class Parser
 	  {
 	    if ($type == $this->get_token()['type'])
 	      {
-		$this->tree[] = $this->$func();
+		if ($this->get_token()['type'] != 'VARIABLE')
+		  $this->tree[] = $this->$func();
+		else
+		  $this->$func();
 		$error = false;
 	      }
 	  }
@@ -39,7 +43,7 @@ class Parser
     if ($this->tokens)
       echo "Parse error !\n";
     else
-      return $this->tree;
+      return array('tree' => $this->tree, 'variables' => $this->variables);
   }
 
   private function check_var()
@@ -50,7 +54,7 @@ class Parser
     if ($this->get_token()['type'] == 'INTEGER' || $this->get_token()['type'] == 'STRING')
       $value = $this->expect($this->get_token()['type']);
     $this->expect('SEMICOLON');
-    return array('type' => 'variable', 'name' => $name['value'], 'value' =>  $value);
+    $this->variables[] = array('type' => 'variable', 'name' => $name['value'], 'value' =>  $value);
   }
   
   private function check_if()
