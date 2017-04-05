@@ -6,7 +6,7 @@
 // Login   <tarlow_v@etna-alternance.net>
 // 
 // Started on  Wed Mar 29 08:41:34 2017 TARLOWSKI Valentin
-// Last update Sun Apr  2 11:29:51 2017 SANCHEZ Pierre
+// Last update Wed Apr  5 21:51:41 2017 TARLOWSKI Valentin
 //
 
 REQUIRE_ONCE("parser.php");
@@ -49,10 +49,9 @@ class Lexer
   public function tokenization()
   {
     $error = false;
-    while($this->code > 0 && !$error)
+    while(strlen($this->code) > 1 && !$error)
       {
-	$this->code = ltrim($this->code);	
-	var_dump($this->code);
+	$this->clean_code();
 	$error = true;
 	foreach ($this->rules as $rule)
 	  if (preg_match("/^" . $rule[0] . "/", $this->code, $preg))
@@ -67,7 +66,6 @@ class Lexer
 	      $this->code = substr($this->code, strlen($preg[0]));
 	      break;
 	    }
-	$this->code = ltrim($this->code);
       } 
     if ($error)
       {
@@ -90,13 +88,15 @@ if (test > 10)
 }
 else
 {
-     print \"Oui\";
-}
-";
+     if (5 == 5)
+     {
+        print \"Oui\";
+     }
+     print \"Non\";
+}";
 
 $lexer = NEW Lexer($code);
 $tokens = $lexer->tokenization();
-var_dump($tokens);
 $parser = NEW Parser($tokens);
 $tree = $parser->parser();
 

@@ -5,7 +5,7 @@
 // Login   <tarlow_v@etna-alternance.net>
 // 
 // Started on  Fri Mar 31 07:44:51 2017 TARLOWSKI Valentin
-// Last update Sun Apr  2 10:21:59 2017 SANCHEZ Pierre
+// Last update Wed Apr  5 21:47:38 2017 TARLOWSKI Valentin
 //
 
 class Parser
@@ -33,14 +33,13 @@ class Parser
 	      {
 		$this->tree[] = $this->$func();
 		$error = false;
-		var_dump($this->tokens);
 	      }
 	  }
       }while ($this->tokens && $error != true);
     if ($this->tokens)
       echo "Parse error !\n";
     else
-      var_dump($this->tree);
+      return $this->tree;
   }
 
   private function check_var()
@@ -60,11 +59,11 @@ class Parser
     $this->expect('LEFT_PAREN');
     $cond = $this->get_condition();
     $this->expect('RIGHT_PAREN');
-    $block = $this->check_block();
+    $block = $this->check_block()[0];
     if ($this->get_token()['type'] == 'ELSE')
       {
 	$this->shift_token();
-	return array('type' => 'if', 'condition' => $cond, 'block' => $block, array('type' => 'else', 'block' => $this->check_block()));
+	return array('type' => 'if', 'condition' => $cond, 'block' => $block, 'else' => array('block' => $this->check_block()[0]));
       }
     else
       return array('type' => 'if', 'condition' => $cond, 'block' => $block);
