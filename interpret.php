@@ -6,7 +6,7 @@
 // Login   <sanche_p@etna-alternance.net>
 // 
 // Started on  Sat Apr  1 17:51:59 2017 SANCHEZ Pierre
-// Last update Thu Apr  6 09:24:28 2017 SANCHEZ Pierre
+// Last update Thu Apr  6 10:22:05 2017 SANCHEZ Pierre
 //
 
 $parse = array (		
@@ -105,10 +105,11 @@ function run($parse) {
   while(isset($tree[$i]))
     {
      if ($tree[$i]['type'] == 'if')
-	{	 
+	{
+	  echo "If Detected\n";
 	  $condition = run($tree[$i]['condition']);
 	  if($condition !=  0)
-	    echo "bendo";
+	  echo "Condition Detected\n";
 	}
      else if ($tree[$i]['type'] == 'VARNAME')
        {
@@ -125,9 +126,14 @@ function run($parse) {
 	   }
        }
      else if ($tree[$i]['type'] == 'GR')
-       echo "salur jerom\'s";
+       echo "Greater Detected\n";
      else if ($tree[$i]['type'] == 'INTEGER')
-       echo "INTEGER";
+       {
+	 echo "Int Detected\n";
+	 $block = run($tree[$i]['block']);
+	   if($block != 0)
+	     echo "block detected";
+       }
      else
        echo "Unable to handle node type ".$tree[$i]['type'];
      $i++;
