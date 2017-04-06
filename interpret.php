@@ -1,107 +1,133 @@
 #!/usr/bin/env php
-   <?php
-   // interpret.php for  in /home/etna/sanche_p
-   // 
-   // Made by SANCHEZ Pierre
-   // Login   <sanche_p@etna-alternance.net>
-   // 
-   // Started on  Sat Apr  1 17:51:59 2017 SANCHEZ Pierre
-   // Last update Sat Apr  1 18:16:35 2017 SANCHEZ Pierre
-   //
+<?php
+// interpret.php for  in /home/etna/sanche_p
+// 
+// Made by SANCHEZ Pierre
+// Login   <sanche_p@etna-alternance.net>
+// 
+// Started on  Sat Apr  1 17:51:59 2017 SANCHEZ Pierre
+// Last update Thu Apr  6 09:03:48 2017 SANCHEZ Pierre
+//
 
-$tree = array (		
-	       'tree' =>
-	       array(
-		     array(
-			   'type' => 'if',
-			   'condition' =>
-			   array (
-				  'type' => 'VARNAME',
-				  'value' => 'test',
+$parse = array (		
+		'tree' =>
+		array(
+		      array(
+			    'type' => 'if',
+			    'condition' =>
+			    array(
+				  array (
+					 'type' => 'VARNAME',
+					 'value' => 'test',
+					 ),
+				  array (
+					 'type' => 'GR',
+					 'value' => '>',
+					 ),
+				  array(
+					'type' => 'INTEGER',
+					'value' => '10',
+					),
 				  ),
-			   array (
-				  'type' => 'GR',
-				  'value' => '>',
+			    ),
+		      'block' =>
+		      array(
+			    'type' => 'print',
+			    'value' =>
+			    array(
+				  'type' => 'STRING',
+				  'value' => 'Hello World',
 				  ),
-			   array(
-				 'type' => 'INTEGER',
-				 'value' => '10',
-				 ),
-			   ),
-		     'block' =>
-		     array(
-			   'type' => 'print',
-			   'value' =>
-			   array(
-				 'type' => 'STRING',
-				 'value' => 'Hello World',
-				 ),
-			   ),
-		     'else' =>
-		     array(
-			   'block' =>
-			   array(
-				 'type' => 'if',
-				 'condition' =>
-				 array(
-				       array(
-					     'type' => 'INTEGER',
-					     'value' => '5',
-					     ),
-				       array(
-					     'type' => 'EQ',
-					     'value' => '==',
-					     ),
-				       array(
-					     'type' => 'INTEGER',
-					     'value' => '5',
-					     ),
-				       ),
-				 'block' =>
-				 array(
-				       'type' => 'print',
-				       'value' =>
-				       array(
-					     'type' => 'STRING',
-					     'value' => 'oui',
-					     ),
-				       ),
-				 ),
-			   ),
-		     ),
-	       'variables' =>
-	       array(
-		     array(
-			   'type' => 'variable',
-			   'name' => 'test',
-			   'value' =>
-			   array(
-				 'type' => 'INTEGER',
-				 'value' => '15',
-				 ),
-			   ),
-		     array(
-			   'type' => 'variable',
-			   'name' => 'test',
-			   'value' =>
-			   array(
-				 'type' => 'STRING',
-				 'oui',
-				 ),
-			   ),
-		     ),
-			);
+			    ),
+		      'else' =>
+		      array(
+			    'block' =>
+			    array(
+				  'type' => 'if',
+				  'condition' =>
+				  array(
+					array(
+					      'type' => 'INTEGER',
+					      'value' => '5',
+					      ),
+					array(
+					      'type' => 'EQ',
+					      'value' => '==',
+					      ),
+					array(
+					      'type' => 'INTEGER',
+					      'value' => '5',
+					      ),
+					),
+				  'block' =>
+				  array(
+					'type' => 'print',
+					'value' =>
+					array(
+					      'type' => 'STRING',
+					      'value' => 'oui',
+					      ),
+					),
+				  ),
+			    ),
+		      ),
+		'variables' =>
+		array(
+		      array(
+			    'type' => 'variable',
+			    'name' => 'test',
+			    'value' =>
+			    array(
+				  'type' => 'INTEGER',
+				  'value' => '15',
+				  ),
+			    ),
+		      array(
+			    'type' => 'variable',
+			    'name' => 'test',
+			    'value' =>
+			    array(
+				  'type' => 'STRING',
+				  'oui',
+				  ),
+			    ),
+		      ),
+				);
 
 
-  
-function run($tree) {
-  if ($tree[0][0]['type'] == 'if')
-    {
-      $condition = run($tree['condition']);
-      if($condition != 0)
-	echo "bendo";
-    }
+
+function run($parse) {
+  $i = 0;
+  if(isset($parse['tree']))
+    $tree = $parse['tree'];
   else
-    echo "Unable to handle node type ".$tree['type'];
+    $tree = $parse;
+  while(isset($tree[$i]))
+    {
+      if ($tree[$i]['type'] == 'if')
+	{	 
+	  $condition = run($tree[$i]['condition']);
+	  if($condition !=  0)
+	    echo "bendo";
+	}	
+      if ($tree[$i]['type'] == 'VARNAME')
+	{
+	  echo "peutetre";
+	  $j = 0;
+	  while(isset($parse['variables'][$j]))
+	    { 
+	      echo "oui";
+	      if($parse['variables'][$j]['name'] == $tree[$i]['value'])
+		{	   
+		  echo "non"; 
+		  $var[] = $parse[$variable][$j]['value']['value'];
+		  echo $var[0];	     
+		}
+	    }    
+	}
+      else
+	echo "Unable to handle node type ".$tree[$i]['type'];
+      $i++;
+    }
 }
-run($tree);
+run($parse);
