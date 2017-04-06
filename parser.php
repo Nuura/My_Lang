@@ -5,7 +5,7 @@
 // Login   <tarlow_v@etna-alternance.net>
 // 
 // Started on  Fri Mar 31 07:44:51 2017 TARLOWSKI Valentin
-// Last update Wed Apr  5 23:59:35 2017 TARLOWSKI Valentin
+// Last update Sun Apr  2 21:49:57 2017 SANCHEZ Pierre
 //
 
 class Parser
@@ -15,7 +15,8 @@ class Parser
   private $variables;
   private $funcs = array (
 			 'VARIABLE' => 'check_var',
-			 'IF' => 'check_if'
+			 'IF' => 'check_if',
+			 'PRINT' => 'check_print'
 			 );
   
   public function __construct($tokens)
@@ -46,6 +47,14 @@ class Parser
       return array('tree' => $this->tree, 'variables' => $this->variables);
   }
 
+  private function check_print()
+  {
+    $this->shift_token();
+    $value = $this->expect("STRING");
+    $this->expect("SEMICOLON");
+    return array('type' => 'print', 'value' => $value);
+  }
+  
   private function check_var()
   {
     $error = false;

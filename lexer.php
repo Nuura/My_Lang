@@ -6,7 +6,7 @@
 // Login   <tarlow_v@etna-alternance.net>
 // 
 // Started on  Wed Mar 29 08:41:34 2017 TARLOWSKI Valentin
-// Last update Thu Apr  6 00:04:59 2017 TARLOWSKI Valentin
+// Last update Sun Apr  2 21:43:51 2017 SANCHEZ Pierre
 //
 
 REQUIRE_ONCE("parser.php");
@@ -82,6 +82,7 @@ class Lexer
 }
 
 $code = "var test = 15;
+print \"Hello Worlddfg\";
 if (test > 10)
 {
      print \"Hello World\";
