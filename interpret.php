@@ -6,7 +6,7 @@
 // Login   <sanche_p@etna-alternance.net>
 // 
 // Started on  Sat Apr  1 17:51:59 2017 SANCHEZ Pierre
-// Last update Thu Apr  6 09:03:48 2017 SANCHEZ Pierre
+// Last update Thu Apr  6 09:24:28 2017 SANCHEZ Pierre
 //
 
 $parse = array (		
@@ -104,30 +104,33 @@ function run($parse) {
     $tree = $parse;
   while(isset($tree[$i]))
     {
-      if ($tree[$i]['type'] == 'if')
+     if ($tree[$i]['type'] == 'if')
 	{	 
 	  $condition = run($tree[$i]['condition']);
 	  if($condition !=  0)
 	    echo "bendo";
-	}	
-      if ($tree[$i]['type'] == 'VARNAME')
-	{
-	  echo "peutetre";
-	  $j = 0;
-	  while(isset($parse['variables'][$j]))
-	    { 
-	      echo "oui";
-	      if($parse['variables'][$j]['name'] == $tree[$i]['value'])
-		{	   
-		  echo "non"; 
-		  $var[] = $parse[$variable][$j]['value']['value'];
-		  echo $var[0];	     
-		}
-	    }    
 	}
-      else
-	echo "Unable to handle node type ".$tree[$i]['type'];
-      $i++;
+     else if ($tree[$i]['type'] == 'VARNAME')
+       {
+	 $j = 0;
+	 while(isset($parse['variables'][$j]))
+	   { 
+	     echo "oui";
+	     if($parse['variables'][$j]['name'] == $tree[$i]['value'])
+	       {	   
+		 echo "non"; 
+		 $var[] = $parse[$variable][$j]['value']['value'];
+		 echo $var[0];	     
+	       }
+	   }
+       }
+     else if ($tree[$i]['type'] == 'GR')
+       echo "salur jerom\'s";
+     else if ($tree[$i]['type'] == 'INTEGER')
+       echo "INTEGER";
+     else
+       echo "Unable to handle node type ".$tree[$i]['type'];
+     $i++;
     }
 }
 run($parse);
